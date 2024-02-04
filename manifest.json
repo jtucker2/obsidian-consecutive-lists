@@ -3,7 +3,7 @@
 	"name": "Consecutive Lists",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
+	"description": "Creates lists that are displayed separately in read mode when separated by an empty line in edit mode.",
 	"author": "Obsidian",
 	"authorUrl": "https://obsidian.md",
 	"fundingUrl": "https://obsidian.md/pricing",
