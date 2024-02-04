@@ -38,7 +38,7 @@ export default class MyPlugin extends Plugin {
 			return null;
 		}
 
-		this.registerDomEvent(document, 'keyup', e => {
+		this.registerDomEvent(document, 'keyup', () => {
 			const editor: Editor | undefined = this.app.workspace.activeEditor?.editor;
 			if (editor !== undefined) {
 				const lineNumber: number = editor.getCursor().line;
