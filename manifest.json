@@ -4,7 +4,7 @@
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Creates lists that are displayed separately in read mode when separated by an empty line in edit mode.",
-	"author": "Obsidian",
+	"author": "Josh Tucker",
 	"authorUrl": "https://obsidian.md",
 	"fundingUrl": "https://obsidian.md/pricing",
 	"isDesktopOnly": false
