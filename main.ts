@@ -1,6 +1,6 @@
 import { Editor, Plugin } from 'obsidian';
 
-export default class MyPlugin extends Plugin {
+export default class ConsecutiveLists extends Plugin {
 
 	async onload() {
 		function isListElement(line: string) {
