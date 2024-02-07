@@ -47,7 +47,7 @@ export default class ConsecutiveLists extends Plugin {
 				if (isFirstListElement(editor, lineNumber)) {
 					const prevListPrefix: string | null = getPreviousListCharacter(editor, lineNumber);
 					if (prevListPrefix != null) {
-						if (prevListPrefix == "-") {
+						if (prevListPrefix == "-" && line.startsWith("-")) {
 							editor.setLine(lineNumber, line.replace("-", "+"));
 						}
 					}
