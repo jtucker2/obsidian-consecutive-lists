@@ -1,5 +1,5 @@
 # Obsidian Consecutive Lists
-Create lists that are displayed separately in reading mode, when separated by an empty line.
+Create consecutive lists that are displayed separately in reading mode.
 
 ![](demo.gif)
 
