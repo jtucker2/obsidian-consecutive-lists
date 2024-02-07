@@ -1,6 +1,8 @@
 # Obsidian Consecutive Lists
 Create lists that are displayed separately in reading mode, when separated by an empty line.
 
+![](demo.gif)
+
 This plugin changes nothing about the way markdown is interpreted in Obsidian. It creates markdown entirely compatible with other parsers, ensuring your notes are transferrable, and completely unreliant on this plugin.
 
 It works simply by automatically inserting alternating list characters in consecutive lists, so they appear correctly separated in reading mode.
