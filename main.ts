@@ -3,22 +3,47 @@ import { Editor, Plugin } from 'obsidian';
 export default class ConsecutiveLists extends Plugin {
 
 	async onload() {
-		function isListElement(line: string) {
+		function lineStartsWithListChar(line: string) {
 			const listPrefixes = ["- ", "+ ", "* "];
 			line = line.trimStart();
 			return listPrefixes.some(prefix => line.startsWith(prefix));
 		}
 
+		function isListElement(editor: Editor, lineNumber: number) {
+			let line: string = editor.getLine(lineNumber);
+
+			if (lineStartsWithListChar(line)) {
+				return true;
+			} else {
+				while (lineNumber >= 0) {
+					line = editor.getLine(lineNumber)
+					if (line == "") {
+						return false;
+					} else if (lineStartsWithListChar(line)) {
+						return true;
+					}
+					lineNumber--;
+				}
+			}
+
+			return false;
+		}
+
 		function getPreviousListCharacter(editor: Editor, lineNumber: number) {
 			let listEnded: boolean = false;
+			let line: string;
 
 			while (lineNumber >= 0) {
-				const line: string = editor.getLine(lineNumber);
-				if (isListElement(line) && listEnded) {
+				line = editor.getLine(lineNumber);
+				if (isListElement(editor, lineNumber) && listEnded) {
+					while (!lineStartsWithListChar(line)) {
+						lineNumber--;
+						line = editor.getLine(lineNumber);
+					}
 					return (line[0]);
 				} else if (line == "") {
 					listEnded = true;
-				} else if (!isListElement(line)) {
+				} else if (!isListElement(editor, lineNumber)) {
 					return null;
 				}
 				lineNumber--;
@@ -34,11 +59,11 @@ export default class ConsecutiveLists extends Plugin {
 
 			while (lineNumber < numLines) {
 				const line: string = editor.getLine(lineNumber);
-				if (isListElement(line) && listEnded) {
+				if (isListElement(editor, lineNumber) && listEnded) {
 					return (line[0]);
 				} else if (line == "") {
 					listEnded = true;
-				} else if (!isListElement(line)) {
+				} else if (!isListElement(editor, lineNumber)) {
 					return null;
 				}
 				lineNumber++;
@@ -137,7 +162,7 @@ export default class ConsecutiveLists extends Plugin {
 			
 			while (lineNumber > 0) {
 				const line: string = editor.getLine(lineNumber)
-				if (line == "" || isListElement(line)) {
+				if (line == "" || isListElement(editor, lineNumber)) {
 					lineNumber -= 1;
 				} else {
 					lineNumber += 1;
@@ -150,7 +175,7 @@ export default class ConsecutiveLists extends Plugin {
 			let firstList: boolean = true; // this is just because I want the first list to start with '-'
 
 			var line: string = editor.getLine(lineNumber);
-			while ((line == "" || isListElement(line)) && lineNumber < numLines) {
+			while ((line == "" || isListElement(editor, lineNumber)) && lineNumber < numLines) {
 
 				if (line == "") {
 					if (!firstList) dashes = !dashes;
@@ -161,16 +186,16 @@ export default class ConsecutiveLists extends Plugin {
 					}
 					lineNumber--;
 
-				} else if (isListElement(line)) {
+				} else if (isListElement(editor, lineNumber)) {
 					if (dashes) {
 						const i: number | null = indexOfListCharacter(line);
-						if (i != null) {
+						if (i != null && lineStartsWithListChar(line)) {
 							const newLine: string = line.slice(0, i) + '-' + line.slice(i+1);
 							editor.setLine(lineNumber, newLine);
 						}
 					} else {
 						const i: number | null = indexOfListCharacter(line);
-						if (i != null) {
+						if (i != null && lineStartsWithListChar(line)) {
 							const newLine: string = line.slice(0, i) + '+' + line.slice(i+1);
 							editor.setLine(lineNumber, newLine);
 						}
@@ -198,7 +223,7 @@ export default class ConsecutiveLists extends Plugin {
 				 */
 				if (ch == line.length) {
 
-					if (isListElement(line)) {
+					if (isListElement(editor, lineNumber)) {
 
 						if (inconsistencyBetweenLists(editor, lineNumber)) {
 							// console.log("inconsitency between lists")
